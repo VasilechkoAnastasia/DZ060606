@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="green-border">
+            <div class="section">
+                <h3>Тип топлива</h3>
+                <select id="fuelType" onchange="updateFuelPrice()">
+                    <option value="benzin">Бензин</option>
+                    <option value="diesel">Дизель</option>
+                    <option value="electric">Электричество</option>
+                </select>
+                <span>Стоимость:</span>
+                <input type="text" id="fuelPrice" readonly>
+            </div>
+
+            <div class="section">
+                <h3>Количество</h3>
+                <input type="number" id="amount" placeholder="0">
+                <span>литров</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Оплата:</h3>
+            <div class="currency-options">
+                Валюта:
+                <label><input type="radio" name="currency" value="uah" checked><span>грн</span></label>
+                <label><input type="radio" name="currency" value="eur"><span>евро</span></label>
+                <label><input type="radio" name="currency" value="usd"><span>доллар</span></label>
+            </div>
+        </div>
+
+        <div class="total-section">
+            <label>Сумма к оплате:</label>
+            <input type="text" id="total" readonly>
+            <button onclick="calculateTotal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        const fuelPrices = {
+            benzin: 50,
+            diesel: 45,
+            electric: 10
+        };
+
+        const conversionRates = {
+            uah: 1,
+            eur: 0.03,
+            usd: 0.025
+        };
+
+        function updateFuelPrice() {
+            const fuelType = document.getElementById("fuelType").value;
+            document.getElementById("fuelPrice").value = `${fuelPrices[fuelType]} ₴/л`;
+        }
+
+        function calculateTotal() {
+            const fuelType = document.getElementById("fuelType").value;
+            const amount = parseFloat(document.getElementById("amount").value);
+            const currency = document.querySelector('input[name="currency"]:checked').value;
+
+            if (!amount || amount <= 0) {
+                alert("Введите корректное количество топлива.");
+                return;
+            }
+
+            const priceInUah = fuelPrices[fuelType] * amount;
+            const total = priceInUah * conversionRates[currency];
+            document.getElementById("total").value = `${total.toFixed(2)} ${currency.toUpperCase()}`;
+        }
+        updateFuelPrice();
+    </script>
+
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 600px;
+            height: 350px;
+            border: 2px solid #000;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .section {
+            margin: 10px 20px;
+        }
+
+        .section label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select {
+            padding: 5px;
+            font-size: 16px;
+            width: 150px;
+            margin-bottom: 5px;
+        }
+
+        .green-border {
+            border: 1px solid green;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .currency-options {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            border-radius: 4px;
+            gap: 5px;
+        }
+
+        .currency-options label {
+            display: inline-flex;
+            align-items: center;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .currency-options input {
+            margin: 0;
+            padding: 0;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #000;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .currency-options input:checked::before {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 6px;
+            height: 6px;
+            background-color: black;
+            border-radius: 50%;
+        }
+
+        .currency-options span {
+            margin: 10px;
+            padding: 0;
+        }
+
+        .total-section {
+            display: flex;
+            align-items: center;
+            margin: 15px 0 0 20px;
+        }
+
+        .total-section input {
+            border: 2px solid red;
+            width: 150px;
+            margin-left: 10px;
+            text-align: center;
+            font-size: 18px;
+            color: red;
+        }
+
+        button {
+            background-color: #87CEFA;
+            color: black;
+            font-weight: bold;
+            border: 2px solid blue;
+            border-radius: 3px;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #5aaedc;
+        }
+    </style>
+</body>
+
+</html>
